@@ -2,7 +2,6 @@ package com.devsuperior.dsmeta.service;
 
 import com.devsuperior.dsmeta.entities.Sale;
 import com.devsuperior.dsmeta.repository.SaleRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,12 +9,19 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class SaleService {
-    public SaleRepository saleRepository;
+
+    private SaleRepository saleRepository;
+
+    private SmsService smsService;
+
+    public SaleService(SaleRepository saleRepository, SmsService smsService) {
+        this.saleRepository = saleRepository;
+        this.smsService = smsService;
+    }
+
     public Page<Sale> findSales(String minDate, String maxDate, Pageable pageable){
 
         LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
@@ -25,5 +31,6 @@ public class SaleService {
 
         return saleRepository.findSales(min, max, pageable);
     }
+
 
 }
